@@ -39,14 +39,14 @@ for l in r_user.iter_lines():
                 in_status = in_text.split(' ')
                 print(in_status)
                 if '지역' in in_status:
-                    r = menu.local(in_text.split('지역')[-1])
+                    status = menu.local(in_text.split('지역')[-1]) + '\n\n @'+reply_to_account
                 else:
                     m = menu.cat(in_status)
                     p = menu.pick(m)
                     status = '추천 메뉴는 ' + p + '!!! \n@'+reply_to_account
-                    print(status)
-                    r = toot.sendtoot(status, to=reply_to_id)
-                    print(r)
+                print(status)
+                r = toot.sendtoot(status, to=reply_to_id)
+                print(r)
             elif t == 'follow':
                 new_follow = newdec['account']['id']
                 print('new follower: ' + new_follow)
