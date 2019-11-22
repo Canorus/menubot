@@ -35,23 +35,29 @@ for l in r_user.iter_lines():
                 reply_to_id = newdec['status']['id']
                 reply_to_account = newdec['account']['acct']
                 in_text = bs(newdec['status']['content'],'html.parser').get_text()
-                print(in_text)
+                #print(in_text)
                 in_status = in_text.split(' ')
-                print(in_status)
+                #print(in_status)
                 if '지역' in in_status:
-                    status = menu.local(in_text.split('지역')[-1]) + '\n\n @'+reply_to_account
+                    try:
+                        tl = in_text.split('지역')
+                        tl = [x.replace('@menubot','').strip() for x in tl]
+                        del tl[tl.index('')]
+                        status = menu.local(tl[0]) + '\n\n@'+reply_to_account
+                    except:
+                        status = '검색 값이 없습니다. 다른 키워드로 시도해 주세요. \n\n@'+reply_to_account
                 else:
                     m = menu.cat(in_status)
                     p = menu.pick(m)
                     status = '추천 메뉴는 ' + p + '!!! \n@'+reply_to_account
-                print(status)
+                #print(status)
                 r = toot.sendtoot(status, to=reply_to_id)
-                print(r)
+                print(r.json())
             elif t == 'follow':
                 new_follow = newdec['account']['id']
-                print('new follower: ' + new_follow)
+                #print('new follower: ' + new_follow)
                 t = requests.post(instance + '/api/v1/accounts/' + new_follow + '/follow', headers=status_h)
                 print(t.content.decode('utf-8'))
         except:
-            print('error occurred')
+            #print('error occurred')
             pass
